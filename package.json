@@ -2,6 +2,14 @@
   "name": "counter-sliding-window",
   "version": "1.0.0",
   "main": "index.js",
+  "keywords": [
+    "sliding-window"
+  ],
+  "author": "Assaf Kamil <assafkamil@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Geekoosh/counter-sliding-window"
+  },
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
@@ -31,7 +39,8 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
     "test": "jest --coverage",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "publish:np": "np"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",

@@ -1,6 +1,7 @@
 # counter-sliding-window
 
 [![Build Status](https://github.com/Geekoosh/counter-sliding-window/workflows/tests/badge.svg)](https://github.com/Geekoosh/counter-sliding-window/actions?query=workflow%3A%22tests%22)
+[![NPM Version](https://shields.io/npm/v/counter-sliding-window.svg?style=flat)](https://www.npmjs.org/package/counter-sliding-window)
 
 Sliding window counter implementation.
 Supports bucketing counts by seconds, minutes and hours
