@@ -1,0 +1,26 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Test on node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [12.x, 14.x, 16.x, 17.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        cache: 'npm'
+        node-version: ${{ matrix.node-version }}
+    - name: Install deps
+      run: npm ci
+    - name: Liniting
+      run: npm run lint
+    - name: Testing
+      run: npm test

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/cjs/tsconfig.tsbuildinfo",
+    "target": "esnext",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "./dist/cjs",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
