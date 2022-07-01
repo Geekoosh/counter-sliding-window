@@ -25,11 +25,11 @@ sliding.add(1);
 sliding.add(2);
 
 // After 1 more second [Time 4]
-console.log(sliding.get()) // prints 3
+console.log(sliding.get()); // prints 3
 
 // After 3 more seconds [Time 7]
-console.log(sliding.get()) // prints 2
+console.log(sliding.get()); // prints 2
 
 // After 2 more seconds [Time 9]
-console.log(sliding.get()) // prints 0
+console.log(sliding.get()); // prints 0
 ```
