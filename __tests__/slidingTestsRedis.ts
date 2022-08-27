@@ -23,10 +23,12 @@ describe('test sliding window with Redis', () => {
   });
 
   it('basically works', async () => {
-    const sliding = new SlidingWindowCounterRedis('counter', 1, 'seconds', {
-      host: container.getHost(),
-      port: container.getMappedPort(6379)
-    });
+    const sliding = new SlidingWindowCounterRedis(
+      'counter',
+      1,
+      'seconds',
+      redisClient
+    );
 
     await sliding.add(3);
     await sliding.add(5);
@@ -38,7 +40,7 @@ describe('test sliding window with Redis', () => {
       'counterWindow',
       5,
       'seconds',
-      { host: container.getHost(), port: container.getMappedPort(6379) }
+      redisClient
     );
     const now = await redisNow();
 
@@ -66,7 +68,8 @@ describe('test sliding window with Redis', () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterSomeSeconds',
         5,
-        'seconds'
+        'seconds',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -75,14 +78,15 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 6 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 3 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
     it('minutes', async () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterSomeMinutes',
         5,
-        'minutes'
+        'minutes',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -91,14 +95,15 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 6 * 60 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 3 * 60 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
     it('hours', async () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterSomeHours',
         5,
-        'hours'
+        'hours',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -107,7 +112,7 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 6 * 60 * 60 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 3 * 60 * 60 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
   });
@@ -121,7 +126,8 @@ describe('test sliding window with Redis', () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterAllOutSeconds',
         5,
-        'seconds'
+        'seconds',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -130,14 +136,15 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 10 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 8 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
     it('minutes', async () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterAllOutMinutes',
         5,
-        'minutes'
+        'minutes',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -146,14 +153,15 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 10 * 60 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 8 * 60 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
     it('hours', async () => {
       const sliding = new SlidingWindowCounterRedis(
         'counterAllOutHours',
         5,
-        'hours'
+        'hours',
+        redisClient
       );
       const now = await redisNow();
       const spy = jest
@@ -162,7 +170,7 @@ describe('test sliding window with Redis', () => {
         .mockImplementationOnce(() => `${now - 10 * 60 * 60 * 1000}-*`)
         .mockImplementationOnce(() => `${now - 8 * 60 * 60 * 1000}-*`);
 
-      testCounter(sliding);
+      await testCounter(sliding);
       spy.mockRestore();
     });
   });

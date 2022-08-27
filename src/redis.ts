@@ -35,7 +35,7 @@ export class SlidingWindowCounterRedis implements SlidingWindowCounter {
     private counterName: string,
     private period: number,
     private bucketBy: 'seconds' | 'minutes' | 'hours',
-    config: RedisConfig = {}
+    redis: RedisConfig | Redis = {}
   ) {
     switch (this.bucketBy) {
       case 'seconds':
@@ -49,14 +49,18 @@ export class SlidingWindowCounterRedis implements SlidingWindowCounter {
         break;
     }
     this.periodInMS = period * this.bucketInMS;
-    this.configureRedis(config);
+    this.configureRedis(redis);
   }
 
-  private configureRedis(config: RedisConfig) {
-    const { host = 'localhost', port = 6379, options } = config;
-    this.redis = options
-      ? new Redis(port, host, options)
-      : new Redis(port, host);
+  private configureRedis(redis: RedisConfig | Redis) {
+    if (redis instanceof Redis) {
+      this.redis = redis;
+    } else {
+      const { host = 'localhost', port = 6379, options } = redis;
+      this.redis = options
+        ? new Redis(port, host, options)
+        : new Redis(port, host);
+    }
     this.createCounterScript();
   }
 
@@ -99,6 +103,10 @@ export class SlidingWindowCounterRedis implements SlidingWindowCounter {
   private counterId() {
     return '*';
   }
+
+  /*async close(): Promise<void> {
+    await this.redis.quit();
+  }*/
 
   async add(count: number): Promise<number> {
     const res = await this.redis.streamCounterAdd(

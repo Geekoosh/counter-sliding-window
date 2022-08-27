@@ -47,8 +47,10 @@ The Redis implementation of the sliding window counter is suitable for counters 
 
 ```ts
 import { SlidingWindowCounterRedis } from 'counter-sliding-window';
+import Redis from 'ioredis';
 
-const sliding = new SlidingWindowCounterRedis('counter-key-name', 5, 'seconds');
+const redisClient = new Redis(6379, "localhost")
+const sliding = new SlidingWindowCounterRedis('counter-key-name', 5, 'seconds', redisClient);
 // [Time 0]
 await sliding.add(1);
 // After 3 seconds [Time 3]
