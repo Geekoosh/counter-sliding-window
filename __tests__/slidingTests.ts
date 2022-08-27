@@ -1,17 +1,15 @@
-import { SlidingWindowCounter } from '../src/index';
+import { SlidingWindowCounterLocal } from '../src/index';
 
 describe('test sliding window', () => {
   it('All results within window', () => {
-    const sliding = new SlidingWindowCounter(5, 'seconds');
-    sliding.windowStart();
+    const sliding = new SlidingWindowCounterLocal(5, 'seconds');
     sliding.add(1);
     sliding.add(2);
     expect(sliding.get()).toBe(3);
   });
   describe('Some results outside window', () => {
     function testCounter(bucketBy: 'seconds' | 'minutes' | 'hours') {
-      const sliding = new SlidingWindowCounter(5, bucketBy);
-      sliding.windowStart();
+      const sliding = new SlidingWindowCounterLocal(5, bucketBy);
       sliding.add(1);
       sliding.add(2);
       expect(sliding.get()).toBe(2);
@@ -19,9 +17,6 @@ describe('test sliding window', () => {
     it('seconds', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
-        .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
         .mockImplementationOnce(() =>
           new Date('2022-05-20T08:58:24.252Z').valueOf()
         )
@@ -38,9 +33,6 @@ describe('test sliding window', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
         .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
-        .mockImplementationOnce(() =>
           new Date('2022-05-20T09:00:23.252Z').valueOf()
         )
         .mockImplementationOnce(() =>
@@ -56,9 +48,6 @@ describe('test sliding window', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
         .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
-        .mockImplementationOnce(() =>
           new Date('2022-05-20T08:58:23.252Z').valueOf()
         )
         .mockImplementationOnce(() =>
@@ -73,8 +62,7 @@ describe('test sliding window', () => {
   });
   describe('All results outside window', () => {
     function testCounter(bucketBy: 'seconds' | 'minutes' | 'hours') {
-      const sliding = new SlidingWindowCounter(5, bucketBy);
-      sliding.windowStart();
+      const sliding = new SlidingWindowCounterLocal(5, bucketBy);
       sliding.add(1);
       sliding.add(2);
       expect(sliding.get()).toBe(0);
@@ -82,9 +70,6 @@ describe('test sliding window', () => {
     it('seconds', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
-        .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
         .mockImplementationOnce(() =>
           new Date('2022-05-20T08:58:24.252Z').valueOf()
         )
@@ -101,9 +86,6 @@ describe('test sliding window', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
         .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
-        .mockImplementationOnce(() =>
           new Date('2022-05-20T09:00:23.252Z').valueOf()
         )
         .mockImplementationOnce(() =>
@@ -118,9 +100,6 @@ describe('test sliding window', () => {
     it('hours', () => {
       const spy = jest
         .spyOn(global.Date, 'now')
-        .mockImplementationOnce(() =>
-          new Date('2022-05-20T08:58:23.143Z').valueOf()
-        )
         .mockImplementationOnce(() =>
           new Date('2022-05-20T08:58:23.252Z').valueOf()
         )
