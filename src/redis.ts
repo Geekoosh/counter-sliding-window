@@ -80,7 +80,7 @@ export class SlidingWindowCounterRedis implements SlidingWindowCounter {
           return -1
         end
         redis.call('XADD', KEYS[1], 'MINID', '~', start_window, ARGV[3], 'count', ARGV[2])
-        redis.call('EXPIRE', KEYS[1], ARGV[1])
+        redis.call('PEXPIRE', KEYS[1], ARGV[1])
         return 1
       `
     });
