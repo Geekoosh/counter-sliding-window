@@ -43,12 +43,43 @@ jobs:
       with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+          
     - name: Install deps
-      run: npm ci
-    - name: publish
+      run: npm ci          
+
+    - name: Git configuration
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+                  
+    - name: Bump release version
+      run: |
+        echo "NEW_VERSION=$(npm --no-git-tag-version version $RELEASE_TYPE)" >> $GITHUB_ENV
+        echo "RELEASE_TAG=latest" >> $GITHUB_ENV
+      env:
+        RELEASE_TYPE: ${{ github.event.inputs.version }}
+    
+    - name: Update changelog
+      uses: superfaceai/release-changelog-action@v1
+      with:
+        path-to-changelog: CHANGELOG.md
+        version: ${{ env.NEW_VERSION }}
+        operation: release
+        
+    - name: Commit CHANGELOG.md and package.json changes and create tag
+      run: |
+        git add "package.json"
+        git add "CHANGELOG.md"
+        git commit -m "chore: release ${{ env.NEW_VERSION }}"
+        git tag ${{ env.NEW_VERSION }}        
+        
+    - name: Publish
+      run: |
+        npm run build
+        npm publish --verbose --access public --tag ${{ env.RELEASE_TAG }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
+    - name: Push changes to repository
       run: |
-        #echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-        #npm whoami
-        npm run publish:np -- ${{ github.event.inputs.version }}
+        git push origin && git push --tags
