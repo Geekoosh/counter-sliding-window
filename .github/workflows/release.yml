@@ -57,21 +57,7 @@ jobs:
         echo "NEW_VERSION=$(npm --no-git-tag-version version $RELEASE_TYPE)" >> $GITHUB_ENV
         echo "RELEASE_TAG=latest" >> $GITHUB_ENV
       env:
-        RELEASE_TYPE: ${{ github.event.inputs.version }}
-    
-    - name: Update changelog
-      uses: superfaceai/release-changelog-action@v1
-      with:
-        path-to-changelog: CHANGELOG.md
-        version: ${{ env.NEW_VERSION }}
-        operation: release
-        
-    - name: Commit CHANGELOG.md and package.json changes and create tag
-      run: |
-        git add "package.json"
-        git add "CHANGELOG.md"
-        git commit -m "chore: release ${{ env.NEW_VERSION }}"
-        git tag ${{ env.NEW_VERSION }}        
+        RELEASE_TYPE: ${{ github.event.inputs.version }}        
         
     - name: Publish
       run: |
