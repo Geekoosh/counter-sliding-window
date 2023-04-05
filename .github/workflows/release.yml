@@ -39,16 +39,16 @@ jobs:
     needs: build
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Use Node.js
       with:
-        cache: 'npm'
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
     - name: Install deps
       run: npm ci
     - name: publish
       env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-        npm whoami
+        #echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        #npm whoami
         npm run publish:np -- ${{ github.event.inputs.version }}
