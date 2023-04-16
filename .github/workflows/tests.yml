@@ -8,7 +8,7 @@ jobs:
   build:
     name: Test on node ${{ matrix.node-version }}
     #runs-on: ubuntu-latest
-    runs-on: [self-hosted, gh-test]
+    runs-on: [self-hosted, Linux, X64, gh-test]
     strategy:
       fail-fast: true
       matrix:
